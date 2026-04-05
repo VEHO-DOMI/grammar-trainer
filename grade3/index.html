@@ -8971,7 +8971,7 @@ async function loadBattleHistory(filter) {
 
           const savedMode = localStorage.getItem(LS_KEY + '-mode');
 
-          if (savedMode) {
+          if (savedMode && savedMode !== 'campaign') {
 
             state.mode = savedMode;
 
@@ -9141,9 +9141,11 @@ function selectAppMode(mode) {
 // --- Make showHomeScreen mode-aware ---
 const _origShowHomeScreen = showHomeScreen;
 showHomeScreen = function() {
-  if (state.mode === 'campaign' && typeof showCampaignMap === 'function') {
-    showCampaignMap();
-  } else if (state.mode === 'grammar') {
+  if (state.mode === 'campaign') {
+    state.mode = 'vocab';
+    localStorage.setItem(LS_KEY + '-mode', 'vocab');
+  }
+  if (state.mode === 'grammar') {
     showGrammarHomeScreen();
   } else {
     // Restore vocab UI elements before showing
